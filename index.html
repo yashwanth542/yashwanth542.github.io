@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yashwanth | Web Developer Portfolio</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!--stylesheet-->
+    <link rel="stylesheet" href="Stylesheet.css">
+</head>
+<body>
+    <!-- Background Elements -->
+    <div class="grid-pattern"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <a href="#hero" class="flex items-center gap-1 group text-xl font-bold" style="font-family: 'Space Grotesk', sans-serif;">
+                <div class="w-11 h-11 rounded-2xl overflow-hidden">
+                   <img src="images/yashu logo.png" class="w-full h-full object-cover">
+                </div>
+                <span style="color: var(--accent);"><space>Y</space></span>ashwanth
+            </a>
+            
+            <!-- Mobile Menu Button -->
+            <button class="mobile-menu-btn  " id="mobileMenuBtn" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <!-- Nav Links -->
+            <div class="nav-links flex items-center gap-8" id="navLinks">
+                <a href="#hero" class="nav-link active">Home</a>
+                <a href="#about" class="nav-link">About</a>
+                <a href="#skills" class="nav-link">Skills</a>
+                <a href="#projects" class="nav-link">Projects</a>
+                <a href="#contact" class="nav-link">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="hero-content max-w-5xl mx-auto">
+            <div class="hero-badge reveal">
+                Available for opportunities
+            </div>
+            
+            <h1 class="hero-title reveal reveal-delay-1">
+                Hi, I'm <span>Yashwanth</span>
+            </h1>
+            
+            <div class="typing-container reveal reveal-delay-2">
+                <span id="typingText" class="typing-text"></span>
+                <span class="cursor"></span>
+            </div>
+            
+            <p class="text-lg md:text-xl mb-8 max-w-2xl reveal reveal-delay-3" style="color: var(--fg-secondary);">
+                A passionate diploma student in Computer Science, crafting digital experiences 
+                and building the future one line of code at a time.
+            </p>
+            
+            <div class="hero-buttons reveal reveal-delay-4">
+                <a href="#projects" class="btn-primary">
+                    View Projects
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
+                <a href="#contact" class="btn-secondary">
+                    Get in Touch
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about">
+        <div class="section-header reveal">
+            <span class="section-label">About Me</span>
+            <h2 class="section-title">Who I Am</h2>
+            <p class="section-desc">Get to know the person behind the code</p>
+        </div>
+
+        <div class="about-grid">
+            <div class="about-image reveal reveal-delay-1">
+                <div class="about-image-wrapper">
+                    <div class="about-image-placeholder">
+                        <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                            <circle cx="12" cy="7" r="4"/>
+                        </svg>
+                        <img src="images/yashu image.png">
+                    </div>
+                </div>
+            </div>
+
+            <div class="about-content reveal reveal-delay-2">
+                <h3>Aspiring Software Engineer</h3>
+                <p>
+                    I'm a Diploma Computer Science student with a deep passion for technology and 
+                    software development. My journey in coding started with curiosity and has 
+                    evolved into a genuine love for creating solutions that make a difference.
+                </p>
+                <p>
+                    My goal is to become a professional Software Engineer, contributing to 
+                    innovative projects and continuously expanding my knowledge in the 
+                    ever-evolving tech landscape.
+                </p>
+
+                <div class="traits-grid">
+                    <div class="trait-item">
+                        <div class="trait-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                                <polyline points="22 4 12 14.01 9 11.01"/>
+                            </svg>
+                        </div>
+                        <span class="trait-text">Hardworking</span>
+                    </div>
+                    <div class="trait-item">
+                        <div class="trait-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+                                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+                            </svg>
+                        </div>
+                        <span class="trait-text">Quick Learner</span>
+                    </div>
+                    <div class="trait-item">
+                        <div class="trait-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <path d="M12 16v-4M12 8h.01"/>
+                            </svg>
+                        </div>
+                        <span class="trait-text">Problem Solver</span>
+                    </div>
+                    <div class="trait-item">
+                        <div class="trait-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                <circle cx="9" cy="7" r="4"/>
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                            </svg>
+                        </div>
+                        <span class="trait-text">Team Player</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills">
+        <div class="section-header reveal">
+            <span class="section-label">Skills</span>
+            <h2 class="section-title">My Toolkit</h2>
+            <p class="section-desc">Technologies and tools I work with</p>
+        </div>
+
+        <div class="skills-container">
+            <div class="skills-grid">
+                <!-- HTML -->
+                <div class="skill-card reveal reveal-delay-1">
+                    <div class="skill-header">
+                        <div class="skill-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="#e34f26" stroke-width="1.5">
+                                <path d="M4 4l1.5 15L12 21l6.5-2L20 4H4z"/>
+                                <path d="M8 8h8l-.5 5-3.5 1-3.5-1-.2-2"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="skill-name">HTML</div>
+                            <div class="skill-level">Advanced</div>
+                        </div>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" data-progress="90"></div>
+                    </div>
+                </div>
+
+                <!-- CSS -->
+                <div class="skill-card reveal reveal-delay-2">
+                    <div class="skill-header">
+                        <div class="skill-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="#1572b6" stroke-width="1.5">
+                                <path d="M4 4l1.5 15L12 21l6.5-2L20 4H4z"/>
+                                <path d="M16 8H8l.3 3h7.4l-.6 6-3.1 1-3.1-1-.2-2"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="skill-name">CSS</div>
+                            <div class="skill-level">Intermediate</div>
+                        </div>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" data-progress="75"></div>
+                    </div>
+                </div>
+
+                <!-- JavaScript -->
+                <div class="skill-card reveal reveal-delay-3">
+                    <div class="skill-header">
+                        <div class="skill-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="#f7df1e" stroke-width="1.5">
+                                <rect x="3" y="3" width="18" height="18" rx="2"/>
+                                <path d="M9 17v-4m0 0c0-1 0-2-2-2s-2 1-2 2m4 0c0-1 0-2 2-2s2 1 2 2v4"/>
+                                <path d="M15 17v-6m0 0c0-2 3-2 3 0"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="skill-name">JavaScript</div>
+                            <div class="skill-level">Intermediate</div>
+                        </div>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" data-progress="65"></div>
+                    </div>
+                </div>
+
+                <!-- Python -->
+                <div class="skill-card reveal reveal-delay-4">
+                    <div class="skill-header">
+                        <div class="skill-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="#3776ab" stroke-width="1.5">
+                                <path d="M12 2c-2.5 0-4.5.5-5 2-.5 1.5 0 3 1 4"/>
+                                <path d="M12 22c2.5 0 4.5-.5 5-2 .5-1.5 0-3-1-4"/>
+                                <circle cx="8" cy="6" r="1"/>
+                                <circle cx="16" cy="18" r="1"/>
+                                <path d="M7 10h10c2 0 3 1 3 3s-1 3-3 3H7c-2 0-3-1-3-3s1-3 3-3z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="skill-name">Python</div>
+                            <div class="skill-level">Beginner</div>
+                        </div>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" data-progress="30"></div>
+                    </div>
+                </div>
+
+                <!-- Git -->
+                <div class="skill-card reveal reveal-delay-5">
+                    <div class="skill-header">
+                        <div class="skill-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="#f05032" stroke-width="1.5">
+                                <circle cx="12" cy="12" r="3"/>
+                                <circle cx="19" cy="5" r="2"/>
+                                <circle cx="5" cy="19" r="2"/>
+                                <path d="M14.5 9.5L17 7M9.5 14.5L7 17"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="skill-name">Git</div>
+                            <div class="skill-level">Beginner</div>
+                        </div>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" data-progress="40"></div>
+                    </div>
+                </div>
+
+                <!-- Responsive Design -->
+                <div class="skill-card reveal reveal-delay-5">
+                    <div class="skill-header">
+                        <div class="skill-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5">
+                                <rect x="2" y="3" width="20" height="14" rx="2"/>
+                                <path d="M8 21h8M12 17v4"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="skill-name">Responsive Design</div>
+                            <div class="skill-level">Intermediate</div>
+                        </div>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" data-progress="70"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects">
+        <div class="section-header reveal">
+            <span class="section-label">Projects</span>
+            <h2 class="section-title">My Work</h2>
+            <p class="section-desc">A collection of projects I've built</p>
+        </div>
+
+        <div class="projects-grid">
+            <!-- Project 1 -->
+            <div class="project-card reveal reveal-delay-1">
+                <div class="project-image">
+                    <svg class="project-placeholder-icon" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                        <rect x="3" y="3" width="18" height="18" rx="2"/>
+                        <path d="M3 9h18M9 21V9"/>
+                    </svg>
+                </div>
+                <div class="project-content">
+                    <div class="project-tags">
+                        <span class="project-tag">HTML</span>
+                        <span class="project-tag">CSS</span>
+                        <span class="project-tag">JavaScript</span>
+                    </div>
+                    <h3 class="project-title">Simple Portfolio Website</h3>
+                    <p class="project-desc">
+                        A responsive personal portfolio website showcasing my skills, 
+                        projects, and contact information with simple design.
+                    </p>
+                    <div class="project-links">
+                        <a href="simple portfolio.html" class="project-link primary">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                                <polyline points="15 3 21 3 21 9"/>
+                                <line x1="10" y1="14" x2="21" y2="3"/>
+                            </svg>
+                            Live Demo
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project 2 -->
+            <div class="project-card reveal reveal-delay-2">
+                <div class="project-image">
+                    <svg class="project-placeholder-icon" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                        <rect x="2" y="3" width="20" height="14" rx="2"/>
+                        <path d="M8 21h8M12 17v4"/>
+                    </svg>
+                </div>
+                <div class="project-content">
+                    <div class="project-tags">
+                        <span class="project-tag">HTML</span>
+                        <span class="project-tag">CSS</span>
+                    </div>
+                    <h3 class="project-title">Landing Page</h3>
+                    <p class="project-desc">
+                        A clean, modern landing page for a fictional tech startup with 
+                        smooth animations and responsive design.
+                    </p>
+                    <div class="project-links">
+                        <a href="landing page.html" class="project-link primary">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                                <polyline points="15 3 21 3 21 9"/>
+                                <line x1="10" y1="14" x2="21" y2="3"/>
+                            </svg>
+                            Live Demo
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project 3 -->
+            <div class="project-card reveal reveal-delay-3">
+                <div class="project-image">
+                    <svg class="project-placeholder-icon" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="M12 6v6l4 2"/>
+                    </svg>
+                </div>
+                <div class="project-content">
+                    <div class="project-tags">
+                        <span class="project-tag">JavaScript</span>
+                        <span class="project-tag">CSS</span>
+                    </div>
+                    <h3 class="project-title">Digital Clock</h3>
+                    <p class="project-desc">
+                        A stylish digital clock application with dark/light theme toggle 
+                        and multiple timezone support.   
+                    </p>
+                </br>
+                    <div class="project-links">
+                        <a href="Digital clock.html" class="project-link primary">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                                <polyline points="15 3 21 3 21 9"/>
+                                <line x1="10" y1="14" x2="21" y2="3"/>
+                            </svg>
+                            Live Demo
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact">
+        <div class="section-header reveal">
+            <span class="section-label">Contact</span>
+            <h2 class="section-title">Get In Touch</h2>
+            <p class="section-desc">Have a project in mind? Let's work together</p>
+        </div>
+
+        <div class="contact-container">
+            <div class="contact-wrapper reveal reveal-delay-1">
+                <div class="contact-grid">
+                    <div class="contact-info">
+                        <h3>Let's Connect</h3>
+                        <p>
+                            I'm always open to discussing new projects, creative ideas, 
+                            or opportunities to be part of your vision. Feel free to reach out!
+                        </p>
+                        
+                        <div class="social-links">
+                            <a href="https://GitHub.com/k-yashwanth09/" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="11 Profile">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                                </svg>
+                            </a>
+                            <a href="https://discord.gg/kqrEs9st6K" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Discord Profile">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+                                </svg>
+                            </a>
+                            <a href="mailto:kanakatiyashwanth@gmail.com" class="social-link" aria-label="Email">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                                    <polyline points="22,6 12,13 2,6"/>
+                                </svg>
+                            </a>
+                            <a href="https://instagram.com/its_me_yashu542" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="11 Profile">
+                                <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M7.75 2C4.678 2 2 4.678 2 7.75v8.5C2 19.322 4.678 22 7.75 22h8.5C19.322 22 22 19.322 22 16.25v-8.5C22 4.678 19.322 2 16.25 2h-8.5zM12 7a5 5 0 110 10 5 5 0 010-10zm6.5-.75a1.25 1.25 0 11-2.5 0 1.25 1.25 0 012.5 0zM12 9a3 3 0 100 6 3 3 0 000-6z"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+
+                    <form class="contact-form" id="contactForm">
+                        <div class="form-group">
+                            <input type="text" id="name" class="form-input" placeholder="Your Name" required aria-label="Your Name">
+                        </div>
+                        <div class="form-group">
+                            <input type="email" id="email" class="form-input" placeholder="Your Email" required aria-label="Your Email">
+                        </div>
+                        <div class="form-group">
+                            <textarea id="message" class="form-input" placeholder="Your Message" required aria-label="Your Message"></textarea>
+                        </div>
+                        <button type="submit" class="form-submit">
+                            Send Message
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="22" y1="2" x2="11" y2="13"/>
+                                <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                            </svg>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <script>
+        const form = document.getElementById("contactForm");
+
+        form.addEventListener("submit", async function(event) {
+        event.preventDefault();
+
+        const name = document.getElementById("name").value;
+        const email = document.getElementById("email").value;
+        const message = document.getElementById("message").value;
+
+        const webhookURL = "https://discord.com/api/webhooks/1494709998297677824/15cT_349L3zxSXmb06BYyWC6vQFe9vNgVAS8cQX9j9gY4VRfAbdqwixyJpOQxpeU2TgZ";
+
+        const data = {
+        content: "**New Contact Message**\nName: " + name + "\nEmail: " + email + "\nMessage: " + message 
+        };
+
+        await fetch(webhookURL, {
+            method: "POST",
+            headers: {
+            "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+            });
+
+            alert("Message sent successfully!");
+        });
+    </script>
+
+    <!-- Footer -->
+    <footer class="py-16 border-t border-border/50 ">
+     <div class="max-w-7xl mx-auto px-6">
+     <div class="grid grid-cols-1 md:grid-cols-4 gap-10 mb-14">
+        <div class="md:col-span-2">
+          <a class="flex items-center gap-1 md-5 group">
+            <div class="w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-300  " >
+              <img src="images/yashu logo.png">
+            </div>
+            <span class="font-display font-bold text-xl text-fg">Yashwanth</span>
+          </a>
+          <p class="text-muted max-w-sm leading-relaxed">
+            Passionate about building modern and responsive web applications. and 24/7 expert support. Built for Website, by yashwanth.
+          </p>
+        </br>
+            <a href="https://instagram.com/its_me_yashu542" class="instagram" aria-label="instagram">
+            <div class="trait-item">
+                <div class="trait-icon">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M7.75 2C4.678 2 2 4.678 2 7.75v8.5C2 19.322 4.678 22 7.75 22h8.5C19.322 22 22 19.322 22 16.25v-8.5C22 4.678 19.322 2 16.25 2h-8.5zM12 7a5 5 0 110 10 5 5 0 010-10zm6.5-.75a1.25 1.25 0 11-2.5 0 1.25 1.25 0 012.5 0zM12 9a3 3 0 100 6 3 3 0 000-6z"/>
+                    </svg>
+                </div>
+                <span class="trait-text"><b>its_me_yashu542</b></span>
+            </div>
+            </a>
+        </div>
+
+      <div class="flex-row">
+        <!-- Quick Links -->
+        <div>
+          <h4 class="font-display font-semibold text-fg mb-5">Quick Links</h4>
+          <ul class="space-y-3">
+            <li><a href="#hero" class="text-muted hover:text-accent transition-colors">Home</a></li>
+            <li><a href="#about" class="text-muted hover:text-accent transition-colors">About</a></li>
+            <li><a href="#skills" class="text-muted hover:text-accent transition-colors">skills</a></li>
+            <li><a href="#projects" class="text-muted hover:text-accent transition-colors">project</a></li>
+            <li><a href="#contact" class="text-muted hover:text-accent transition-colors">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+      </div>
+      
+      <div class="pt-10 border-t border-border/50 flex flex-col md:flex-row  justify-between gap-4">
+        <p>
+          &copy; Designed & Built by Yashwanth. All rights reserved.
+        </p>
+      </div>
+      </div>
+     
+    </footer>
+
+    <!-- Scroll to Top Button -->
+    <button class="scroll-top" id="scrollTop" aria-label="Scroll to top">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 15l-6-6-6 6"/>
+        </svg>
+    </button>
+
+    <script src="JavaScript.js"></script>
+    
+</body>
+</html>

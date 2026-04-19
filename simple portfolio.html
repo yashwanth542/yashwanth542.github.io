@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>simple portfolio</title>
+    <style>
+     html{
+        scroll-behavior: smooth;
+    }  
+body{
+   margin:0%;
+   font-family: monospace;
+   font-size: 15px;
+   background-color: aliceblue;
+}
+header{
+    background-color: #2196f3;
+    height: 100vh;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+header h1{
+    color: white;
+}
+.button{
+    height: 30px;
+    width: 120px;
+    border: none;
+    border-radius:10px;
+    cursor: pointer;
+    margin: 10px;
+    font-weight: bold;
+}
+.button:hover{
+    transform: scale(1.2);
+    background-color: white;
+    color:#2196f3;
+    font-weight: bold;
+    font-size: medium;
+}
+section{
+    height: 100%;
+    border: 1px solid black;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    padding: 40px;
+    box-shadow: 0px 3px 8px lightgray;
+}
+h1{
+    color: #2196f3;
+    font-size: 50px;
+    margin: 4px;
+}
+img{
+    height: 250px;
+    border-radius: 5px;
+    box-shadow: 0px 4px 10px gray;
+}
+main{
+    padding: 10px;
+}
+.container{
+    height: 100vb;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 70%;
+    max-width: 800px;
+    margin: auto;
+    text-align: center;
+}
+table{
+    text-align: center;
+}
+.submit{
+    height: 25px;
+    width: 120px;
+    border-radius:10px;
+    cursor: pointer;
+    background-color: skyblue;
+}
+.submit:hover{
+    background-color: lawngreen;
+    color:white;
+    font-weight:bold;
+    font-size: medium;
+}
+input{
+    border:1px solid gray;
+    border-radius:5px; 
+    height:25px;
+}
+textarea{
+    border:1px solid gray;
+    border-radius:5px; 
+    margin-left: 30px;
+}
+form{
+    width: 350px;
+   margin: 15px;
+}
+.form-group{
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0;
+}
+label{
+    width: 150px;
+    font-weight: bolder;
+}
+
+footer{
+    height:100px;
+    background-color: black;
+    color:gray;
+    text-align: center;
+    font-weight: 30px;
+}
+.footerfixed{
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    height: 40px;
+    width: 40px;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    background-color: #21c2f3;
+    color:white;
+    font-weight: bold;
+    font-size: medium;
+}
+.skills-container{
+display:flex;
+justify-content:center;
+gap:25px;
+flex-wrap:wrap;
+align-items:center;
+text-align:center;
+}
+.skill-card{
+background:white;
+padding:10px;
+width:225px;
+border-radius:10px;
+box-shadow:5px 4px 10px gray;
+text-align:center;
+margin:20px;
+}
+.skill-card:hover{
+transform:scale(1.05);
+box-shadow:5px 4px 10px gray;
+background:#2196f3;
+color:white;
+}
+.projects-container{
+display:flex;
+justify-content:center;
+gap:20px;
+flex-wrap:wrap;
+}
+.project-card{
+background:white;
+padding:20px;
+width:220px;
+border-radius:10px;
+box-shadow:5px 5px 10px gray;
+text-align:center;
+margin: 20px;
+}
+.project-card:hover{
+transform:scale(1.05);
+background-color: black;
+color: white;
+}
+.typing{
+    font-weight: bold;
+    color: white;
+    font-size: 20px;
+}
+</style>
+</head>
+<body>
+
+    <header>
+     <h1>Welcome to Yashwanth profile</h1>
+     <p>I am </strong><span class="typing"></span></p>
+     <nav>
+     <a href="#about"><button class="button">about</button></a>
+     <a href="#skills"><button class="button">skills</button></a>
+     <a href="#project"><button class="button">project</button></a>
+     <a href="#contact"><button class="button">Contact Me</button></a>
+     </nav>   
+    </header>
+
+    <main>
+
+      <section id="about">
+            <div class="container">
+            <h1>YASHWANTH web developer</h1>
+            <img src="images/yashwanth.png">
+            <p>I am a passionate web developer with a focus on front and technologies.</p>
+            <p>I am currently pursuving by diploma in <em>TKR college of engineering and technology.</em></p>
+            <P>I have learnt web development from</br>code with YASHWANTH.</P>
+            <p>you can see in this <b>WEBSITE</b>, what i have learnt in HTML, css, java script.</p>
+            </div>
+        </section>
+        
+    <section id="skills">
+
+      <div class="container">
+        <h1>My Skills</h1>
+      <div class="skills-container">
+
+      <div class="skill-card">
+        <h3>HTML</h3>
+        <p>Creating the structure of webpages.</p>
+      </div>
+
+      <div class="skill-card">
+        <h3>CSS</h3>
+        <p>Designing and styling websites.</p>
+      </div>
+
+      <div class="skill-card">
+        <h3>JavaScript</h3>
+        <p>Adding basic interactivity to webpages.</p>
+      </div>
+
+      <div class="skill-card">
+        <h3>C Programming</h3>
+        <p>Learning programming logic and basic programs.</p>
+      </div>
+
+      </div>
+      </div>
+    </section>
+
+    <section id="project">
+      <div class="container">
+      <h1>My Projects</h1>
+      <div class="projects-container">
+
+      <div class="project-card">
+      <h3>Profile Website</h3>
+      <p>A personal website showing my skills, projects and contact details.</p>
+      <p><b>Technology:</b> HTML, CSS</p>
+      </div>
+
+      <div class="project-card">
+      <h3>Simple Webpage</h3>
+      <p>Created a webpage with header, sections and form.</p>
+      <p><b>Technology:</b> HTML</p>
+      </div>
+
+      <div class="project-card">
+      <h3>Styled Webpage</h3>
+      <p>Improved webpage design using CSS styling, like Added colors, buttons and layout.</p>
+      <p><b>Technology:</b> CSS</p>
+      </div>
+
+      </div>
+      </div>
+      </section>
+
+        <section id="contact">
+
+            <div class="container">
+            <h1>Contact Me</h1>
+            <p>feel free for register in this form</p>
+            <form action="">
+                <div class="form-group">
+             <label for="username">username:</label>
+             <input type="text" id="username" >
+               </div>
+               <div class="form-group">
+              <label for="email">Email:</label>
+              <input type="email" id="email" >
+               </div>
+
+                <div class="form-group">
+               <label>choose your gender:</label>
+               <input type="radio" id="male" value="male">
+               <label for="male">Male</label>
+               <input type="radio" id="Female" value="Female">
+               <label for="Female">Female</label>
+                </div>
+               
+                <div class="form-group">
+               <label>Select your interests:</label>
+               <input type="checkbox" id="coding" value="coding">
+               <label for="coding">Coding</label>
+
+               <input type="checkbox" id="reading" value="reading">
+               <label for="reading">Reading</label>
+                </div>
+
+               <div class="form-group">
+               <label for="bio">bio(upto 200 characters):</label>
+               <textarea id="bio" name="bio" rows="4" cols="50" placeholder="Enter your Bio..."></textarea>
+               </div>
+
+                <button type="submit" class="submit">submit</button>
+           </form>
+          </div>
+
+        </section>
+    </main>
+    <a href="#">
+    <button class="footerfixed">TOP</button>
+    </a>
+    <footer>
+        <p>© Yashwanth profile.com</p>
+        <br>
+        <span>instagram : its_me_yashu542</span>
+    </footer>
+    
+  <script>
+let words = ["Web Developer", "Simple WebSite Developer", "Future Software Engineer"];
+let i = 0;
+let j = 0;
+let currentWord = "";
+let isDeleting = false;
+
+function type() {
+currentWord = words[i];
+
+if (!isDeleting) {
+document.querySelector(".typing").textContent = currentWord.substring(0, j+1);
+j++;
+
+if (j == currentWord.length) {
+isDeleting = true;
+setTimeout(type, 1000);
+return;
+}
+}
+
+else {
+document.querySelector(".typing").textContent = currentWord.substring(0, j-1);
+j--;
+
+if (j == 0) {
+isDeleting = false;
+i++;
+if (i == words.length) {
+i = 0;
+}
+}
+}
+
+setTimeout(type, 120);
+}
+
+type();
+  </script>
+
+</body>
+</html>

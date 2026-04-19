@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Clock</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <style>
+        :root {
+            --bg: #0a0a0f;
+            --bg-elevated: #111118;
+            --fg: #e4e4e7;
+            --fg-muted: #71717a;
+            --accent: #22d3ee;
+            --accent-glow: rgba(34, 211, 238, 0.3);
+            --accent-dim: rgba(34, 211, 238, 0.1);
+            --secondary: #f472b6;
+            --card: rgba(17, 17, 24, 0.8);
+            --border: rgba(255, 255, 255, 0.08);
+            --radius: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--bg);
+            color: var(--fg);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Background Effects */
+        .bg-grid {
+            position: fixed;
+            inset: 0;
+            background-image: 
+                linear-gradient(rgba(34, 211, 238, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(34, 211, 238, 0.02) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .bg-glow {
+            position: fixed;
+            inset: 0;
+            background: 
+                radial-gradient(ellipse 60% 40% at 50% 0%, rgba(34, 211, 238, 0.08), transparent),
+                radial-gradient(ellipse 40% 30% at 80% 50%, rgba(244, 114, 182, 0.05), transparent);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Canvas for particles */
+        #particleCanvas {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1rem 2rem;
+            transition: all 0.4s ease;
+        }
+
+        .nav.scrolled {
+            background: rgba(10, 10, 15, 0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--fg);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .logo-accent {
+            color: var(--accent);
+        }
+
+        .logo-cursor {
+            display: inline-block;
+            width: 2px;
+            height: 1em;
+            background: var(--accent);
+            animation: blink 1s step-end infinite;
+            margin-left: 2px;
+        }
+
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--fg-muted);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a::before {
+            content: '#';
+            color: var(--accent);
+            opacity: 0;
+            margin-right: 4px;
+            transition: opacity 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--fg);
+            background: var(--accent-dim);
+        }
+
+        .nav-links a:hover::before {
+            opacity: 1;
+        }
+
+        .nav-btn {
+            background: var(--accent) !important;
+            color: var(--bg) !important;
+            font-weight: 500;
+        }
+
+        .nav-btn:hover {
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
+
+        .mobile-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--fg);
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        /* Mobile Menu */
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(10, 10, 15, 0.98);
+            backdrop-filter: blur(30px);
+            z-index: 999;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+
+        .mobile-menu.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .mobile-menu a {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.5rem;
+            color: var(--fg);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .mobile-menu a:hover {
+            color: var(--accent);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 8rem 2rem 4rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Digital Clock Widget */
+        .clock-container {
+            margin-bottom: 3rem;
+        }
+
+        .clock-widget {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2rem 2.5rem;
+            backdrop-filter: blur(20px);
+            position: relative;
+            overflow: hidden;
+            min-width: 320px;
+        }
+
+        .clock-widget::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+        }
+
+        .clock-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .clock-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--fg-muted);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .clock-timezone {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--accent);
+            background: var(--accent-dim);
+            padding: 0.25rem 0.75rem;
+            border-radius: 100px;
+        }
+
+        .clock-display {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.25rem;
+        }
+
+        .clock-segment {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .clock-digits {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: clamp(3rem, 8vw, 4.5rem);
+            font-weight: 600;
+            color: var(--fg);
+            line-height: 1;
+            min-width: 2.5ch;
+            text-align: center;
+            position: relative;
+        }
+
+        .clock-digits::after {
+            content: attr(data-value);
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            color: var(--accent);
+            opacity: 0;
+            animation: digitFade 0.3s ease-out;
+        }
+
+        @keyframes digitFade {
+            0% { opacity: 0.5; transform: translateY(-10px); }
+            100% { opacity: 0; transform: translateY(0); }
+        }
+
+        .clock-digits.flip {
+            animation: digitFlip 0.3s ease;
+        }
+
+        @keyframes digitFlip {
+            0% { transform: scaleY(1); }
+            50% { transform: scaleY(0.8); }
+            100% { transform: scaleY(1); }
+        }
+
+        .clock-segment-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6rem;
+            color: var(--fg-muted);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-top: 0.5rem;
+        }
+
+        .clock-separator {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 300;
+            color: var(--accent);
+            animation: separatorPulse 1s ease-in-out infinite;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes separatorPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .clock-period {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+            color: var(--accent);
+            margin-left: 0.5rem;
+            align-self: flex-start;
+            margin-top: 0.5rem;
+            font-weight: 500;
+        }
+
+        .clock-date {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .clock-date-text {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--fg-muted);
+        }
+
+        .clock-day {
+            color: var(--accent);
+            font-weight: 500;
+        }
+
+        /* Day Progress */
+        .clock-progress-container {
+            margin-top: 1rem;
+        }
+
+        .clock-progress-bar {
+            height: 3px;
+            background: var(--border);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .clock-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--secondary));
+            border-radius: 2px;
+            transition: width 1s linear;
+        }
+
+        .clock-progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 0.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            color: var(--fg-muted);
+        }
+
+        /* Hero Content */
+        .hero-content {
+            text-align: center;
+            max-width: 800px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--fg-muted);
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+            opacity: 0;
+            animation: fadeUp 0.8s ease forwards;
+        }
+
+        .badge-dot {
+            width: 6px;
+            height: 6px;
+            background: #4ade80;
+            border-radius: 50%;
+            animation: pulseDot 2s ease-in-out infinite;
+        }
+
+        @keyframes pulseDot {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.5); }
+            50% { box-shadow: 0 0 0 4px rgba(74, 222, 128, 0); }
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 7vw, 4.5rem);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            letter-spacing: -2px;
+        }
+
+        .hero-title-line {
+            display: block;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeUp 0.8s ease forwards;
+        }
+
+        .hero-title-line:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .hero-accent {
+            color: var(--accent);
+            position: relative;
+        }
+
+        .hero-typing {
+            border-right: 3px solid var(--accent);
+            padding-right: 4px;
+        }
+
+        .hero-subtitle {
+            font-size: 1.1rem;
+            color: var(--fg-muted);
+            max-width: 550px;
+            margin: 0 auto 2.5rem;
+            opacity: 0;
+            animation: fadeUp 0.8s ease 0.4s forwards;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            opacity: 0;
+            animation: fadeUp 0.8s ease 0.6s forwards;
+        }
+
+        @keyframes fadeUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.9rem 1.75rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-decoration: none;
+            border-radius: var(--radius);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: var(--bg);
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 0 30px var(--accent-glow);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--fg);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--accent);
+            background: var(--accent-dim);
+        }
+
+        /* Sections */
+        .section {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .section-header {
+            margin-bottom: 3rem;
+        }
+
+        .section-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section-tag::before {
+            content: '';
+            width: 24px;
+            height: 1px;
+            background: var(--accent);
+        }
+
+        .section-title {
+            font-size: clamp(1.75rem, 4vw, 2.5rem);
+            font-weight: 700;
+            letter-spacing: -1px;
+        }
+
+        /* Contact */
+        .contact-wrapper {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .contact-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2.5rem;
+            backdrop-filter: blur(20px);
+        }
+
+        .contact-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .contact-card > p {
+            color: var(--fg-muted);
+            margin-bottom: 2rem;
+        }
+
+        .contact-links {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .contact-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.25rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--fg);
+            text-decoration: none;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+        }
+
+        .contact-link:hover {
+            border-color: var(--accent);
+            background: var(--accent-dim);
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-label {
+            display: block;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--fg-muted);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.85rem 1rem;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--fg);
+            font-family: inherit;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            background: rgba(34, 211, 238, 0.03);
+        }
+
+        .form-input::placeholder {
+            color: var(--fg-muted);
+        }
+
+        textarea.form-input {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        /* Footer */
+        .footer {
+            padding: 2rem;
+            border-top: 1px solid var(--border);
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .footer-text {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--fg-muted);
+        }
+
+        .footer-text span {
+            color: var(--accent);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .footer-links a {
+            color: var(--fg-muted);
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+
+        /* Scroll Reveal */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-delay-1 { transition-delay: 0.1s; }
+        .reveal-delay-2 { transition-delay: 0.2s; }
+        .reveal-delay-3 { transition-delay: 0.3s; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-toggle {
+                display: block;
+            }
+
+            .mobile-menu {
+                display: flex;
+            }
+
+            .hero {
+                padding: 7rem 1.5rem 3rem;
+            }
+
+            .clock-widget {
+                padding: 1.5rem;
+                min-width: auto;
+            }
+
+            .clock-date {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section {
+                padding: 3.5rem 1.5rem;
+            }
+
+            .contact-card {
+                padding: 1.5rem;
+            }
+
+            .footer-inner {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        /* Reduced Motion */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background -->
+    <canvas id="particleCanvas"></canvas>
+    <div class="bg-grid"></div>
+    <div class="bg-glow"></div>
+
+    <!-- Navigation -->
+    <nav class="nav" id="navbar">
+        <div class="nav-inner">
+            <a href="#" class="logo">
+                <span class="logo-accent">~</span>yashwanth<span class="logo-cursor"></span>
+            </a>
+            <ul class="nav-links">
+                <a href="https://discord.gg/kqrEs9st6K" class="nav-btn">
+                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+                    </svg>
+                    Join Discord
+                </a>
+            </ul>
+            <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle menu">
+                <i data-lucide="menu" style="width: 24px; height: 24px;"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+                <button class="Join border-box border-radius-10px"><a href="https://discord.gg/kqrEs9st6K" class="nav-btn">
+                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+                    </svg>
+                    Join Discord
+                </a>
+                </button> 
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <!-- Digital Clock Widget -->
+        <div class="clock-container">
+            <div class="clock-widget">
+                <div class="clock-header">
+                    <span class="clock-label">Local Time</span>
+                    <span class="clock-timezone" id="timezone">UTC</span>
+                </div>
+                <div class="clock-display">
+                    <div class="clock-segment">
+                        <span class="clock-digits" id="hours" data-value="00">00</span>
+                        <span class="clock-segment-label">Hours</span>
+                    </div>
+                    <span class="clock-separator">:</span>
+                    <div class="clock-segment">
+                        <span class="clock-digits" id="minutes" data-value="00">00</span>
+                        <span class="clock-segment-label">Min</span>
+                    </div>
+                    <span class="clock-separator">:</span>
+                    <div class="clock-segment">
+                        <span class="clock-digits" id="seconds" data-value="00">00</span>
+                        <span class="clock-segment-label">Sec</span>
+                    </div>
+                    <span class="clock-period" id="period">AM</span>
+                </div>
+                <div class="clock-date">
+                    <span class="clock-date-text" id="date">Loading...</span>
+                    <span class="clock-date-text">Day <span class="clock-day" id="dayOfYear">1</span> of 365</span>
+                </div>
+                <div class="clock-progress-container">
+                    <div class="clock-progress-bar">
+                        <div class="clock-progress-fill" id="dayProgress" style="width: 0%"></div>
+                    </div>
+                    <div class="clock-progress-label">
+                        <span>00:00</span>
+                        <span id="dayPercent">0% of day elapsed</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span class="badge-dot"></span>
+                Available for new opportunities
+            </div>
+            <h1 class="hero-title">
+                <span class="hero-title-line">Hi, I'm Yashwanth</span>
+                <span class="hero-title-line">
+                    <span class="hero-accent hero-typing" id="typingText"></span>
+                </span>
+            </h1>
+            <p class="hero-subtitle">
+                A passionate software engineer crafting elegant solutions through clean code and innovative thinking.
+            </p>
+            <div class="hero-buttons">
+                <a href="#contact" class="btn btn-secondary">
+                    <i data-lucide="mail" style="width: 16px; height: 16px;"></i>
+                    Get in Touch
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="section" id="contact">
+        <div class="section-header reveal">
+            <div class="section-tag">Connect</div>
+            <h2 class="section-title">Get in Touch</h2>
+        </div>
+        <div class="contact-wrapper reveal">
+            <div class="contact-card">
+                <h3>Let's Build Something Together</h3>
+                <p>Open for collaborations, freelance work, or just a friendly chat about tech.</p>
+                <div class="contact-links">
+                    <a href="mailto: kanakatiyashwanth@gmail.com" class="contact-link">
+                        <i data-lucide="mail" style="width: 16px; height: 16px;"></i>
+                        Email
+                    </a>
+                    <a href="https://github.com/k-yashwanth09" class="contact-link">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+                        </svg>
+                        GitHub
+                    </a>
+                    <a href="https://discord.gg/kqrEs9st6K" class="contact-link">
+                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+                        </svg>
+                        Discord
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-inner">
+            <p class="footer-text"><span>~</span> designed & built by <span>Yashwanth</span></p>
+            <div class="footer-links">
+                <a href="#home">Digital Clock</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // ===================
+        // Particle Background
+        // ===================
+        const canvas = document.getElementById('particleCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let mouseX = 0;
+        let mouseY = 0;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        function createParticles() {
+            particles = [];
+            const count = Math.floor((canvas.width * canvas.height) / 20000);
+            for (let i = 0; i < count; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    size: Math.random() * 2 + 0.5,
+                    speedX: (Math.random() - 0.5) * 0.3,
+                    speedY: (Math.random() - 0.5) * 0.3,
+                    opacity: Math.random() * 0.5 + 0.1
+                });
+            }
+        }
+
+        function drawParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            particles.forEach((p, i) => {
+                // Mouse interaction
+                const dx = mouseX - p.x;
+                const dy = mouseY - p.y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                
+                if (dist < 150) {
+                    p.x -= dx * 0.01;
+                    p.y -= dy * 0.01;
+                }
+
+                p.x += p.speedX;
+                p.y += p.speedY;
+
+                if (p.x < 0) p.x = canvas.width;
+                if (p.x > canvas.width) p.x = 0;
+                if (p.y < 0) p.y = canvas.height;
+                if (p.y > canvas.height) p.y = 0;
+
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, Math.max(0.1, p.size), 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(34, 211, 238, ${p.opacity})`;
+                ctx.fill();
+
+                // Connect nearby particles
+                particles.slice(i + 1).forEach(p2 => {
+                    const dx2 = p.x - p2.x;
+                    const dy2 = p.y - p2.y;
+                    const dist2 = Math.sqrt(dx2 * dx2 + dy2 * dy2);
+                    if (dist2 < 80) {
+                        ctx.beginPath();
+                        ctx.moveTo(p.x, p.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        ctx.strokeStyle = `rgba(34, 211, 238, ${0.1 * (1 - dist2 / 80)})`;
+                        ctx.stroke();
+                    }
+                });
+            });
+
+            requestAnimationFrame(drawParticles);
+        }
+
+        // Check for reduced motion
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        if (!prefersReducedMotion) {
+            resizeCanvas();
+            createParticles();
+            drawParticles();
+            
+            window.addEventListener('resize', () => {
+                resizeCanvas();
+                createParticles();
+            });
+            
+            window.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+            });
+        }
+
+        // ===================
+        // Digital Clock
+        // ===================
+        const hoursEl = document.getElementById('hours');
+        const minutesEl = document.getElementById('minutes');
+        const secondsEl = document.getElementById('seconds');
+        const periodEl = document.getElementById('period');
+        const dateEl = document.getElementById('date');
+        const timezoneEl = document.getElementById('timezone');
+        const dayOfYearEl = document.getElementById('dayOfYear');
+        const dayProgressEl = document.getElementById('dayProgress');
+        const dayPercentEl = document.getElementById('dayPercent');
+
+        function updateClock() {
+            const now = new Date();
+            let hours = now.getHours();
+            const minutes = now.getMinutes();
+            const seconds = now.getSeconds();
+            const period = hours >= 12 ? 'PM' : 'AM';
+
+            hours = hours % 12 || 12;
+
+            const h = hours.toString().padStart(2, '0');
+            const m = minutes.toString().padStart(2, '0');
+            const s = seconds.toString().padStart(2, '0');
+
+            // Flip animation
+            if (hoursEl.textContent !== h) {
+                hoursEl.classList.add('flip');
+                setTimeout(() => hoursEl.classList.remove('flip'), 300);
+                hoursEl.textContent = h;
+            }
+            if (minutesEl.textContent !== m) {
+                minutesEl.classList.add('flip');
+                setTimeout(() => minutesEl.classList.remove('flip'), 300);
+                minutesEl.textContent = m;
+            }
+            if (secondsEl.textContent !== s) {
+                secondsEl.classList.add('flip');
+                setTimeout(() => secondsEl.classList.remove('flip'), 300);
+                secondsEl.textContent = s;
+            }
+
+            periodEl.textContent = period;
+
+            // Date
+            const options = { weekday: 'long', month: 'short', day: 'numeric', year: 'numeric' };
+            dateEl.textContent = now.toLocaleDateString('en-US', options);
+
+            // Timezone
+            const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            timezoneEl.textContent = tz.split('/').pop().replace('_', ' ');
+
+            // Day of year
+            const start = new Date(now.getFullYear(), 0, 0);
+            const diff = now - start;
+            const oneDay = 1000 * 60 * 60 * 24;
+            const dayOfYear = Math.floor(diff / oneDay);
+            dayOfYearEl.textContent = dayOfYear;
+
+            // Day progress
+            const totalSeconds = now.getHours() * 3600 + minutes * 60 + seconds;
+            const totalDaySeconds = 24 * 3600;
+            const progress = ((totalSeconds / totalDaySeconds) * 100).toFixed(1);
+            dayProgressEl.style.width = progress + '%';
+            dayPercentEl.textContent = progress + '% of day elapsed';
+        }
+
+        updateClock();
+        setInterval(updateClock, 1000);
+
+        // ===================
+        // Typing Effect
+        // ===================
+        const typingEl = document.getElementById('typingText');
+        const roles = [
+            'CSE student',
+            'Web Developer',
+            'Good designer',
+        ];
+        let roleIdx = 0;
+        let charIdx = 0;
+        let isDeleting = false;
+
+        function typeEffect() {
+            const current = roles[roleIdx];
+            
+            if (isDeleting) {
+                typingEl.textContent = current.substring(0, charIdx - 1);
+                charIdx--;
+            } else {
+                typingEl.textContent = current.substring(0, charIdx + 1);
+                charIdx++;
+            }
+
+            let delay = isDeleting ? 50 : 100;
+
+            if (!isDeleting && charIdx === current.length) {
+                delay = 2000;
+                isDeleting = true;
+            } else if (isDeleting && charIdx === 0) {
+                isDeleting = false;
+                roleIdx = (roleIdx + 1) % roles.length;
+                delay = 400;
+            }
+
+            setTimeout(typeEffect, delay);
+        }
+
+        setTimeout(typeEffect, 1200);
+
+        // ===================
+        // Navigation
+        // ===================
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            navbar.classList.toggle('scrolled', window.scrollY > 50);
+        });
+
+        // Mobile Menu
+        const mobileToggle = document.getElementById('mobileToggle');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        mobileToggle.addEventListener('click', () => {
+            mobileMenu.classList.toggle('active');
+            const icon = mobileToggle.querySelector('i');
+            icon.setAttribute('data-lucide', mobileMenu.classList.contains('active') ? 'x' : 'menu');
+            lucide.createIcons();
+        });
+
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.remove('active');
+                mobileToggle.querySelector('i').setAttribute('data-lucide', 'menu');
+                lucide.createIcons();
+            });
+        });
+
+        // ===================
+        // Scroll Reveal
+        // ===================
+        const reveals = document.querySelectorAll('.reveal');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        reveals.forEach(el => observer.observe(el));
+
+        // ===================
+        // Form Handler
+        // ===================
+        function handleSubmit(e) {
+            e.preventDefault();
+            const btn = e.target.querySelector('button');
+            const original = btn.innerHTML;
+            
+            btn.innerHTML = '<i data-lucide="check" style="width: 16px; height: 16px;"></i> Sent!';
+            btn.style.background = '#4ade80';
+            lucide.createIcons();
+            
+            setTimeout(() => {
+                btn.innerHTML = original;
+                btn.style.background = '';
+                lucide.createIcons();
+                e.target.reset();
+            }, 2500);
+        }
+    </script>
+</body>
+</html>
